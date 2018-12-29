@@ -134,14 +134,14 @@ func run_star(){
 		test.star(repo)
 		fmt.Printf("[Start %d] Finished\n", i+1)
 		tt, _ := strconv.Atoi(test.delay)
-		time.Sleep(time.Duration(tt))
+		time.Sleep(time.Duration(tt) * time.Second)
 	}
 	if len(repos) > 0{
 		test.update_gs()
 	}
 }
 
-func main(){
+func main() {
 	run_star()
 	fmt.Printf("Auto Star Finished\nPlease press Enter to quit\n")
 	for{
