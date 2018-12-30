@@ -79,7 +79,7 @@ func (info *INFO)loginGitStar(){
 }
 
 func (info *INFO)getGitStarList() []string{
-	uri := "http://" + info.addr + "/api/users/" + info.gs_name + "/status/"
+	uri := "http://" + info.addr + "/api/users/" + info.gs_name + "/status/recommend"
 	value := url.Values{}
 	method := "GET"
 	res := make([]string,0)
@@ -116,7 +116,9 @@ func (info *INFO)star(repo string){
 	req.SetBasicAuth(info.git_name, info.git_pwd)
 	req.Header.Add("Content-Length", "0")
 	client := &http.Client{}
-	_, err := client.Do(req)
+	resp, err := client.Do(req)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("%s", body)
 	if err != nil{
 		os.Exit(1)
 	}
@@ -129,10 +131,13 @@ func run_star(){
 	test.init()
 	test.loginGitStar()
 	repos := test.getGitStarList()
+	//for _, repo := range(repos){
+	//	fmt.Printf("%s\n", repo)
+	//}
 	fmt.Printf("Get %d repotories to star\n", len(repos))
 	for i, repo := range(repos){
 		test.star(repo)
-		fmt.Printf("[Start %d] Finished\n", i+1)
+		fmt.Printf("[Start %d] %s Finished\n", i+1, repo)
 		tt, _ := strconv.Atoi(test.delay)
 		time.Sleep(time.Duration(tt) * time.Second)
 	}
